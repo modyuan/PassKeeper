@@ -3,11 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>PassKeeper</title>
+    <script>
+        //npm里面的vue不包含compiler，但我这个项目又不打算用webpack之类的，只好这样了。
+        window.$ = window.jQuery = require('./js/jquery.js');
+        window.Vue = require('./js/vue.js');
+        const remote = require('electron').remote;
+        let btnClose=null;
+        $(function () {
+            btnClose = new Vue({
+                el:"#btn-close",
+                methods:{
+                    close:function(){
+                        remote.getCurrentWindow().close()
+                    }
+                }
+            });
+            $(".btn-search").on('click', function () {
+                alert('search!');
+            });
+            $(".search-input").on('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    alert('press enter');
+                }
+            })
+        });
+
+    </script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div#btn-more {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            height: 30px;
+            width: 30px;
+            border-radius: 15px;
+            background-color: #ddd;
+            color: white;
+            font-size: 20px;
+            line-height: 30px;
+            font-weight: 900;
+            text-align: center;
+            box-shadow: 0.5px 0.5px 5px #aaa;
+            cursor: pointer;
+        }
+
+        div.search-wrap {
+            padding-top: 100px;
+        }
+
+        div.search {
+            position: relative;
+            width: 300px;
+            height: 40px;
+            margin: 0 auto;
+            border: 1px solid #aaa;
+            color: #111;
+            border-radius: 5px;
+            padding-left: 8px;
+            box-shadow: 1px 1px 5px #acc5ed;
+        }
+
+        input.search-input {
+            display: block;
+            width: 250px;
+            height: 38px;
+            color: #111;
+            font-size: 25px;
+            line-height: 40px;
+            border: 0 transparent;
+            outline: none;
+        }
+
+        div.btn-search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            right: -1px;
+            top: -1px;
+            border-radius: 0 5px 5px 0;
+            width: 40px;
+            height: 40px;
+            background-color: #799fff;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-<h1>this is a start for me to learn electron</h1>
-<p>what?</p>
+
+<div id="btn-more">···</div>
+<div class="search-wrap">
+    <div class="search">
+        <input type="text" class="search-input">
+        <div class="btn-search">
+            <svg viewBox="0 0 16 16" class="icon-search" style="width:24px; width:24px;" aria-hidden="true">
+                <title></title>
+                <g>
+                    <path d="M12.054 10.864c.887-1.14 1.42-2.57 1.42-4.127C13.474 3.017 10.457 0 6.737 0S0 3.016 0 6.737c0 3.72 3.016 6.737 6.737 6.737 1.556 0 2.985-.533 4.127-1.42l3.103 3.104c.765.46 1.705-.37 1.19-1.19l-3.103-3.104zm-5.317.925c-2.786 0-5.053-2.267-5.053-5.053S3.95 1.684 6.737 1.684 11.79 3.95 11.79 6.737 9.522 11.79 6.736 11.79z"></path>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+</div>
 
 
+<button id="btn-close" @click="close">close this</button>
 </body>
 </html>

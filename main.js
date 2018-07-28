@@ -7,6 +7,8 @@ var window = null;
 
 
 app.on('ready', function() {
-    window = new BrowserWindow({width: 800, height: 600,icon : __dirname+"/imgs/icon.ico"});
+    window = new BrowserWindow({width: 500, height: 400,icon : __dirname+"/imgs/icon.ico"});
     window.loadURL('file://' + __dirname + '/index.html');
+    //window.webContents.openDevTools();
+    window.setMenu(null)
 });

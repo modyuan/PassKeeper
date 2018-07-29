@@ -7,6 +7,11 @@
     "electron": "^2.0.5"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "debug":"electron --inspect=9222 .",
+    "debugrender":"electron --debug-brk=9223 --expose_debug_as=v8debug ."
+  },
+  "config": {
+    "path":"./save.json"
   }
 }

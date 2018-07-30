@@ -35,6 +35,11 @@ $(function () {
         message.setText("载入存储文件。")
     });
     ipcRenderer.send("loadFile");
+    window.addEventListener('keyup', (e)=>{
+        if(e.key === 'Escape'){
+            display.cancel();
+        }
+    }, true);
     message = new Vue({
         el: "#message",
         data: {
@@ -260,6 +265,7 @@ $(function () {
                 display.show = true;
                 display.newItem = false;
                 display.updateById(id);
+                message.setText("右击记录可以复制到剪切板");
 
             },
         }

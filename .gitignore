@@ -77,3 +77,6 @@ typings/
 
 # block test save file
 save.json
+
+# dist for electron-builder
+dist/

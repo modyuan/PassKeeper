@@ -1,5 +1,6 @@
 const fs = require('fs');
-const pathOfFile = process.env.npm_package_config_path;
+const path =require('path');
+const pathOfFile = path.join(process.env.APPDATA,"passkeeper.json");
 
 module.exports = {
     load: function () {

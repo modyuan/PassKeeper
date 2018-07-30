@@ -1,17 +1,34 @@
 {
   "name": "electron-passkeeper",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "yuansu<idgensou@gmail.com>",
   "main": "main.js",
-  "dependencies": {
-    "electron": "^2.0.5"
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^2.0.5",
+    "electron-builder": "^20.26.0"
   },
   "scripts": {
     "start": "electron .",
-    "debug":"electron --inspect=9222 .",
-    "debugrender":"electron --debug-brk=9223 --expose_debug_as=v8debug ."
+    "debug": "electron --inspect=9222 .",
+    "debugrender": "electron --debug-brk=9223 --expose_debug_as=v8debug .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "config": {
-    "path":"./save.json"
+  "build": {
+    "appId": "com.yzmoe.PassKeeper",
+    "copyright": "Copyright © 2018 yuansu",
+    "productName": "PassKeeper",
+    "dmg": {
+      "window": {
+        "x": 200,
+        "y": 200,
+        "width": 500,
+        "height": 360
+      }
+    },
+    "win": {
+      "icon": "imgs/1.png"
+    }
   }
 }

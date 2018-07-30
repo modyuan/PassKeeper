@@ -1,6 +1,6 @@
 {
   "name": "electron-passkeeper",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "author": "yuansu<idgensou@gmail.com>",
   "main": "main.js",
   "dependencies": {

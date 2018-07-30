@@ -3,320 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>PassKeeper</title>
-    <script>
-        //npm里面的vue不包含compiler，但我这个项目又不打算用webpack之类的，只好这样了。
-        window.$ = window.jQuery = require('./js/jquery.js');
-        window.Vue = require('./js/vue.js');
-        window.deepCopy = function (a) {
-            return JSON.parse(JSON.stringify(a));
-        };
-        Array.prototype.removeEmpty = function () {
-            for (let i = 0; i < this.length; i++) {
-                console.log("i:" + i);
-                if (typeof(this[i]) === "undefined" || String(this[i]).trim() === "") {
-                    this.splice(i, 1);
-                    i--;
-                }
-            }
-            return this;
-        };
-
-
-        let {remote, ipcRenderer} = require('electron');
-        let counts;
-        ipcRenderer.on('loadFile-reply', (event, arg) => {
-            counts = arg;
-        });
-        ipcRenderer.on('failToLoad', () => {
-            alert("读取文件失败！请检查权限。");
-        });
-        ipcRenderer.on('failToSave', () => {
-            alert("保存文件失败！请检查权限。");
-        });
-
-        let display, select, search;
-        $(function () {
-            ipcRenderer.send("loadFile");
-
-            display = new Vue({
-                el: ".display",
-                data: {
-                    newItem: false,
-                    current: {
-                        id: 0,
-                        site: "",
-                        user: "",
-                        password: "",
-                        info: "",
-                        keyword: []
-                    },
-                    show: false
-                },
-                methods: {
-                    updateById(id) {
-                        for (let count of counts) {
-                            if (count.id === Number(id)) {
-                                this.current = deepCopy(count);
-                                this.current.keyword = this.current.keyword.join(",");
-                                this.newItem = false;
-                            }
-                        }
-                    },
-                    submit: function () {
-                        search.searchWord = "";
-                        this.show = false;
-                        if (this.newItem) {
-                            this.current.id = counts[counts.length - 1].id + 1;
-                            this.current.keyword = this.current.keyword.split(",").removeEmpty();
-                            counts.push(this.current);
-                            this.current = {};
-                            ipcRenderer.send("saveFile", counts);
-
-                        } else {
-                            counts.some((count, index) => {
-                                if (count.id === this.current.id) {
-                                    this.current.keyword = this.current.keyword.split(",").removeEmpty();
-                                    counts[index] = this.current;
-                                    this.current = {};
-                                    ipcRenderer.send('saveFile', counts);
-                                    return true;
-                                }
-                            });
-                        }
-
-                    },
-                    cancel: function () {
-                        this.current = {};
-                        this.show = false;
-                        select.show = true;
-                        select.result = [];
-                        search.searchWord = "";
-                    }
-                }
-
-            });
-            select = new Vue({
-                el: ".select",
-                data: {
-                    no_result: [{id: 0, site: "无结果"}],
-                    result: [],
-                    show: true
-                },
-                methods: {
-                    showByKeyword: function (keyword) {
-                        this.result = [];
-                        if (keyword !== '') {
-                            for (let count of counts) {
-                                for (let onekey of count.keyword) {
-                                    if (onekey.indexOf(keyword) === 0) {
-                                        this.result.push({id: count.id, site: count.site});
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (this.result.length === 0 && keyword !== "") {
-                            this.result = this.no_result;
-                        }
-
-                    },
-                    goDisplay: function (id) {
-                        this.show = false;
-                        display.show = true;
-                        display.newItem = false;
-                        display.updateById(id);
-
-                    },
-                }
-            });
-            search = new Vue({
-                el: ".search-input",
-                data: {
-                    searchWord: ""
-                },
-                methods: {
-                    update: function (event) {
-                        if (event.keyCode === 13) {
-                            if (select.result.length > 0) {
-                                let id = select.result[0].id;
-                                select.goDisplay(id);
-                            }
-
-                        } else {
-                            select.show = true;
-                            display.show = false;
-                            this.$nextTick(() => {
-                                select.showByKeyword(this.searchWord);
-                            });
-                        }
-                    },
-                }
-            });
-        });
-
-    </script>
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, input, button {
-            font-family: Menlo, "Ubuntu Mono", Consolas, "Courier New", "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
-        }
-
-        div#btn-more {
-            position: fixed;
-            right: 20px;
-            top: 20px;
-            height: 30px;
-            width: 30px;
-            border-radius: 15px;
-            background-color: #ddd;
-            color: white;
-            font-size: 20px;
-            line-height: 30px;
-            font-weight: 900;
-            text-align: center;
-            box-shadow: 0.5px 0.5px 5px #aaa;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        div.search-wrap {
-            padding-top: 80px;
-        }
-
-        div.search {
-            position: relative;
-            width: 300px;
-            height: 40px;
-            margin: 0 auto;
-            border: 1px solid #aaa;
-            color: #111;
-            border-radius: 5px;
-            padding-left: 8px;
-            box-shadow: 1px 1px 5px #acc5ed;
-        }
-
-        input.search-input {
-            display: block;
-            width: 250px;
-            height: 38px;
-            color: #111;
-            font-size: 25px;
-            line-height: 40px;
-            border: 0 transparent;
-            outline: none;
-        }
-
-        div.btn-search {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            right: -1px;
-            top: -1px;
-            border-radius: 0 5px 5px 0;
-            width: 40px;
-            height: 40px;
-            background-color: #799fff;
-            cursor: pointer;
-        }
-
-        table {
-            border-collapse: collapse;
-            font-size: 16px;
-
-        }
-
-        table tr {
-            height: 25px;
-            vertical-align: center;
-        }
-
-        table td {
-            border: 1px solid #222222;
-        }
-
-        table td:first-child {
-            width: 80px;
-            padding: 0 10px;
-        }
-
-        table td:last-child {
-            width: 220px;
-
-        }
-
-        .display {
-            margin: 40px auto;
-            width: 300px;
-            font-size: 14px;
-            position: relative;
-
-        }
-
-        td > input {
-            outline: none;
-            padding-left: 5px;
-            font-size: 16px;
-            height: 24.4px;
-            width: 220px;
-            border: none;
-        }
-
-        .display button#submit {
-            position: absolute;
-            top: 145px;
-            right: 0;
-            height: 30px;
-            width: 100px;
-
-        }
-
-        .display button#cancel {
-            position: absolute;
-            top: 145px;
-            left: 0;
-            height: 30px;
-            width: 100px;
-
-        }
-
-        .select {
-            margin: 40px auto;
-            width: 300px;
-            font-size: 16px;
-            position: relative;
-
-        }
-
-        .select > div {
-            height: 30px;
-            border: 1px solid #aaaaaa;
-            border-bottom: none;
-            font-size: 14px;
-            padding-left: 5px;
-            line-height: 30px;
-            cursor: pointer;
-        }
-
-        .select > div:hover {
-            background: #799fff;
-        }
-
-        .select > div:last-child {
-            border-bottom: 1px solid #aaaaaa;
-        }
-
-
-    </style>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/anime.css">
+    <script src="js/index.js"></script>
 </head>
 <body>
+<div id="btn-wrap">
+    <div id="btn-more" class="circle" @click="trigger">＝</div>
+    <div id="btn-new" class="circle" :style="{animation:animation_add}" @mousemove="keepShow" @click="addItem">＋</div>
+    <div id="btn-fix" class="circle" :style="{animation:animation_fix}" @mousemove="keepShow" @click="fixItem">✏</div>
+    <div id="btn-del" class="circle" :style="{animation:animation_del}" @mousemove="keepShow" @click="delItem">×</div>
+</div>
 
-<div id="btn-more">···</div>
 <div class="search-wrap">
     <div class="search">
         <input type="text" class="search-input" v-model="searchWord" @keyup="update">
@@ -332,34 +30,36 @@
 
 </div>
 <div class="select" :style="{display: show? 'block': 'none'}">
-    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index">网站：{{item.site}}</div>
+    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index">{{item.id===0?'未找到结果...':'网站：'+item.site}}</div>
 
 </div>
-<div class="display" :style="{display: show?'block':'none'}">
+<div class="display clearfix" :style="{display: show?'block':'none'}">
     <table>
         <tr>
             <td>网站名</td>
-            <td><input type="text" v-model="current.site"></td>
+            <td @contextmenu="Rclick('site')" ><input type="text" :style="{color:isReadonly?'#555':'#000'}"  :readonly="isReadonly" placeholder="注册网站名称或域名" v-model="current.site"></td>
         </tr>
         <tr>
             <td>用户名</td>
-            <td><input type="text" v-model="current.user"></td>
+            <td @contextmenu="Rclick('user')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="用户名" v-model="current.user"></td>
         </tr>
         <tr>
             <td>密码</td>
-            <td><input type="text" v-model="current.password"></td>
+            <td @contextmenu="Rclick('password')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="密码" v-model="current.password"></td>
         </tr>
         <tr>
             <td>备注</td>
-            <td><input type="text" v-model="current.info"></td>
+            <td @contextmenu="Rclick('info')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="备注：例如注册用途等。" v-model="current.info"></td>
         </tr>
         <tr>
             <td>关键字</td>
-            <td><input type="text" v-model="current.keyword"></td>
+            <td @contextmenu="Rclick('keyword')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="索引，用逗号分隔开。" v-model="current.keyword"></td>
         </tr>
     </table>
-    <button id="submit" @click="submit">确认修改</button>
-    <button id="cancel" @click="cancel">放弃修改</button>
+    <button id="submit" @click="submit" v-if="!isReadonly">{{newItem?'新增记录':'确认修改'}}</button>
+    <button id="cancel" @click="cancel" v-if="!isReadonly">放弃修改</button>
+
 </div>
+<div id="message" :style="{opacity:opacity}">{{message}}</div>
 </body>
 </html>

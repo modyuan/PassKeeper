@@ -1,0 +1,77 @@
+@keyframes hide-add {
+    0% {
+        top: 70px;
+        opacity: 1;
+    }
+    100% {
+        top: 20px;
+        opacity: 0;
+    }
+}
+
+@keyframes show-add {
+    0% {
+        top: 20px;
+        opacity: 0;
+    }
+    100% {
+        top: 70px;
+        opacity: 1;
+    }
+}
+
+@keyframes hide-fix {
+    0% {
+        top: 120px;
+        opacity: 1;
+    }
+    100% {
+        top: 20px;
+        opacity: 0;
+    }
+}
+
+@keyframes show-fix {
+    0% {
+        top: 20px;
+        opacity: 0;
+    }
+    100% {
+        top: 120px;
+        opacity: 1;
+    }
+}
+
+@keyframes hide-del {
+    0% {
+        top: 170px;
+        opacity: 1;
+    }
+    100% {
+        top: 20px;
+        opacity: 0;
+    }
+}
+
+@keyframes show-del {
+    0% {
+        top: 20px;
+        opacity: 0;
+    }
+    100% {
+        top: 170px;
+        opacity: 1;
+    }
+}
+
+@keyframes message-hide {
+    0% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

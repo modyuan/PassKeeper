@@ -7,6 +7,21 @@
         //npm里面的vue不包含compiler，但我这个项目又不打算用webpack之类的，只好这样了。
         window.$ = window.jQuery = require('./js/jquery.js');
         window.Vue = require('./js/vue.js');
+        window.deepCopy = function (a) {
+            return JSON.parse(JSON.stringify(a));
+        };
+        Array.prototype.removeEmpty = function () {
+            for (let i = 0; i < this.length; i++) {
+                console.log("i:" + i);
+                if (typeof(this[i]) === "undefined" || String(this[i]).trim() === "") {
+                    this.splice(i, 1);
+                    i--;
+                }
+            }
+            return this;
+        };
+
+
         let {remote, ipcRenderer} = require('electron');
         let counts;
         ipcRenderer.on('loadFile-reply', (event, arg) => {
@@ -15,26 +30,18 @@
         ipcRenderer.on('failToLoad', () => {
             alert("读取文件失败！请检查权限。");
         });
-        ipcRenderer.on('failToSave',()=>{
-           alert("保存文件失败！请检查权限。");
+        ipcRenderer.on('failToSave', () => {
+            alert("保存文件失败！请检查权限。");
         });
 
-
-        let btnClose = null;
         let display, select, search;
         $(function () {
             ipcRenderer.send("loadFile");
-            btnClose = new Vue({
-                el: "#btn-close",
-                methods: {
-                    close: function () {
-                        remote.getCurrentWindow().close()
-                    }
-                }
-            });
+
             display = new Vue({
                 el: ".display",
                 data: {
+                    newItem: false,
                     current: {
                         id: 0,
                         site: "",
@@ -47,32 +54,43 @@
                 },
                 methods: {
                     updateById(id) {
-                        for (let i in counts) {
-                            if (counts[i].id === Number(id)) {
-                                this.current = counts[i];
-                                this.current.keyword=this.current.keyword.join(",");
+                        for (let count of counts) {
+                            if (count.id === Number(id)) {
+                                this.current = deepCopy(count);
+                                this.current.keyword = this.current.keyword.join(",");
+                                this.newItem = false;
                             }
                         }
                     },
                     submit: function () {
-                        for(let i in counts){
-                            if(counts[i].id===this.current.id){
-                                //this.current.keyword=this.current.keyword.split(",");
-                                counts[i]=JSON.parse(JSON.stringify(this.current));
-                                counts[i].keyword=counts[i].keyword.split(",");
+                        search.searchWord = "";
+                        this.show = false;
+                        if (this.newItem) {
+                            this.current.id = counts[counts.length - 1].id + 1;
+                            this.current.keyword = this.current.keyword.split(",").removeEmpty();
+                            counts.push(this.current);
+                            this.current = {};
+                            ipcRenderer.send("saveFile", counts);
 
-                                ipcRenderer.send('saveFile',counts);
-                                break;
-                            }
+                        } else {
+                            counts.some((count, index) => {
+                                if (count.id === this.current.id) {
+                                    this.current.keyword = this.current.keyword.split(",").removeEmpty();
+                                    counts[index] = this.current;
+                                    this.current = {};
+                                    ipcRenderer.send('saveFile', counts);
+                                    return true;
+                                }
+                            });
                         }
-                        this.show=false;
+
                     },
-                    cancel:function () {
-                        this.current={};
-                        this.show=false;
-                        select.show=true;
-                        select.result=[];
-                        search.searchWord="";
+                    cancel: function () {
+                        this.current = {};
+                        this.show = false;
+                        select.show = true;
+                        select.result = [];
+                        search.searchWord = "";
                     }
                 }
 
@@ -80,35 +98,32 @@
             select = new Vue({
                 el: ".select",
                 data: {
-                    no_result:[{id: 0, site: "无结果"}],
+                    no_result: [{id: 0, site: "无结果"}],
                     result: [],
                     show: true
                 },
                 methods: {
                     showByKeyword: function (keyword) {
                         this.result = [];
-                        if(keyword!==''){
-                            for (let i in counts) {
-                                let find=false;
-                                for(let j in counts[i].keyword){
-                                    if (counts[i].keyword[j].indexOf(keyword) === 0) {
-                                        this.result.push({id: counts[i].id, site: counts[i].site});
-                                        find=true;
-
+                        if (keyword !== '') {
+                            for (let count of counts) {
+                                for (let onekey of count.keyword) {
+                                    if (onekey.indexOf(keyword) === 0) {
+                                        this.result.push({id: count.id, site: count.site});
+                                        break;
                                     }
                                 }
-                                if(find) continue;
-
                             }
                         }
-                        if(this.result.length===0 && keyword!==""){
-                            this.result=this.no_result;
+                        if (this.result.length === 0 && keyword !== "") {
+                            this.result = this.no_result;
                         }
 
                     },
                     goDisplay: function (id) {
                         this.show = false;
                         display.show = true;
+                        display.newItem = false;
                         display.updateById(id);
 
                     },
@@ -120,15 +135,21 @@
                     searchWord: ""
                 },
                 methods: {
-                    update: function () {
-                        select.show = true;
-                        display.show = false;
-                        this.$nextTick(()=>{
-                            select.showByKeyword(this.searchWord);
-                            console.log("search:"+this.searchWord);
-                        });
+                    update: function (event) {
+                        if (event.keyCode === 13) {
+                            if (select.result.length > 0) {
+                                let id = select.result[0].id;
+                                select.goDisplay(id);
+                            }
 
-                    }
+                        } else {
+                            select.show = true;
+                            display.show = false;
+                            this.$nextTick(() => {
+                                select.showByKeyword(this.searchWord);
+                            });
+                        }
+                    },
                 }
             });
         });
@@ -141,7 +162,7 @@
             box-sizing: border-box;
         }
 
-        body,input,button {
+        body, input, button {
             font-family: Menlo, "Ubuntu Mono", Consolas, "Courier New", "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
         }
 
@@ -254,10 +275,11 @@
             width: 100px;
 
         }
+
         .display button#cancel {
             position: absolute;
             top: 145px;
-            left:0;
+            left: 0;
             height: 30px;
             width: 100px;
 
@@ -310,7 +332,7 @@
 
 </div>
 <div class="select" :style="{display: show? 'block': 'none'}">
-    <div v-for="item in result" @click="goDisplay(item.id)">网站：{{item.site}}</div>
+    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index">网站：{{item.site}}</div>
 
 </div>
 <div class="display" :style="{display: show?'block':'none'}">
@@ -339,8 +361,5 @@
     <button id="submit" @click="submit">确认修改</button>
     <button id="cancel" @click="cancel">放弃修改</button>
 </div>
-
-
-<button id="btn-close" @click="close">close this</button>
 </body>
 </html>

@@ -74,3 +74,6 @@ typings/
 
 # for jetbrain WbStorm
 .idea
+
+# block test save file
+save.json

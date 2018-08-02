@@ -6,6 +6,7 @@ window.Vue = require('./js/vue.js');
 window.deepCopy = function (a) {
     return JSON.parse(JSON.stringify(a));
 };
+
 Array.prototype.removeEmpty = function () {
     for (let i = 0; i < this.length; i++) {
         console.log("i:" + i);
@@ -32,11 +33,12 @@ let display, select, search, btnWrap, message;
 $(function () {
     ipcRenderer.on('loadFile-reply', (event, arg) => {
         counts = arg;
-        message.setText("载入存储文件。")
+        message.setText("载入存储文件。");
+        search.$el.focus();
     });
     ipcRenderer.send("loadFile");
-    window.addEventListener('keyup', (e)=>{
-        if(e.key === 'Escape'){
+    window.addEventListener('keyup', (e) => {
+        if (e.key === 'Escape') {
             display.cancel();
         }
     }, true);
@@ -44,26 +46,26 @@ $(function () {
         el: "#message",
         data: {
             message: "",
-            timer: 0,
+            timer: null,
             opacity: 1,
             time: 0
         },
         methods: {
             setText: function (text) {
-                if (this.timer){
+                if (this.timer) {
                     clearInterval(this.timer);
-
                 }
                 this.message = text;
                 this.opacity = 1;
-                this.time=0;
+                this.time = 0;
                 this.timer = setInterval(() => {
                     this.time += 100;
-                    if (this.time >= 3000) {
-                        this.opacity -= 0.1;
-                    } else if (this.time >= 4000) {
+                    if (this.time >= 4000) {
                         clearInterval(this.timer);
-                        this.time = 0;
+                        this.opacity = 0;
+                        this.timer = null;
+                    } else if (this.time >= 3000) {
+                        this.opacity -= 0.1;
                     }
                 }, 100);
             }
@@ -80,16 +82,16 @@ $(function () {
             timer: 0
         },
         methods: {
-            addItem:function(){
-                select.show=false;
-                display.show=true;
+            addItem: function () {
+                select.show = false;
+                display.show = true;
                 display.addItem();
             },
             fixItem: function () {
-                if(display.show) display.setReadonly(false);
+                if (display.show) display.setReadonly(false);
             },
-            delItem: function (){
-                if(display.show) display.delItem();
+            delItem: function () {
+                if (display.show) display.delItem();
             },
             keepShow: function () {
                 if (this.timer) {
@@ -135,12 +137,12 @@ $(function () {
     display = new Vue({
         el: ".display",
         data: {
-            transMap:{
-                site:"网站名",
-                user:"用户名",
-                password:"密码",
-                info:"备注",
-                keyword:"关键字",
+            transMap: {
+                site: "网站名",
+                user: "用户名",
+                password: "密码",
+                info: "备注",
+                keyword: "关键字",
             },
             newItem: false,
             isReadonly: true,
@@ -162,25 +164,25 @@ $(function () {
             setReadonly(a) {
                 this.isReadonly = a;
             },
-            addItem(){
-                this.current={};
-                this.newItem=true;
-                this.isReadonly=false;
+            addItem() {
+                this.current = {};
+                this.newItem = true;
+                this.isReadonly = false;
             },
-            delItem(){
-                if(!this.newItem){
+            delItem() {
+                if (!this.newItem) {
                     let r = confirm(`确认删除记录[${this.current.site}]吗？`);
                     if (!r) return;
-                    counts.some((v,index)=>{
-                        if(v.id===this.current.id){
-                            counts.splice(index,1);
+                    counts.some((v, index) => {
+                        if (v.id === this.current.id) {
+                            counts.splice(index, 1);
                             message.setText(`删除记录[${v.site}]成功`);
                             this.cancel();
                             ipcRenderer.send("saveFile", counts);
                             return true;
                         }
                     })
-                }else{
+                } else {
                     message.setText("不能删除未建立的记录！");
                 }
             },
@@ -194,7 +196,7 @@ $(function () {
                 }
             },
             submit: function () {
-                let r = confirm(this.newItem?"确认要新增记录吗？":"确认要修改记录吗？");
+                let r = confirm(this.newItem ? "确认要新增记录吗？" : "确认要修改记录吗？");
                 if (!r) return;
                 this.setReadonly(true);
                 if (this.newItem) {
@@ -234,9 +236,38 @@ $(function () {
         data: {
             no_result: [{id: 0, site: "无结果"}],
             result: [],
+            selected: -1,
             show: true
         },
         methods: {
+            hide: function () {
+                this.show = false;
+                this.selected = -1;
+                this.result = [];
+            },
+            moveBy: function (d) {
+                let itemHeight = 30;
+                this.selected += d;
+                if (this.selected >= this.result.length) {
+                    //at the end, go to begin
+                    this.selected = 0;
+                    this.$el.scrollTop = 0;
+                } else if (this.selected < 0) {
+                    //at the begin, go to end
+                    this.selected = this.result.length - 1;
+                    if (this.result.length > 5) {
+                        this.$el.scrollTop = (this.result.length - 5) * itemHeight;
+                    }
+                } else {
+                    if (this.$el.scrollTop > this.selected * itemHeight) {
+                        //when item above the window
+                        this.$el.scrollTop = this.selected * itemHeight;
+                    } else if ((this.$el.scrollTop / itemHeight + 4) < (this.selected))
+                    //when item under the window
+                        this.$el.scrollTop = (this.selected - 4) * itemHeight;
+                }
+
+            },
             showByKeyword: function (keyword) {
                 this.result = [];
                 if (keyword !== '') {
@@ -251,23 +282,30 @@ $(function () {
                     }
                 }
                 message.setText(`找到${this.result.length}个结果。`);
-                if (keyword===""){
+                if (keyword === "") {
                     message.setText('输入关键字来搜索。')
-                }else if(this.result.length === 0){
-                    this.result = [{id:0}];
+                } else if (this.result.length === 0) {
+                    this.result = [{id: 0}];
                     message.setText('找不到结果。');
                 }
 
             },
-            goDisplay: function (id) {
+            goDisplayById: function (id) {
                 if (id === 0) return;
-                this.show = false;
+                this.hide();
                 display.show = true;
                 display.newItem = false;
                 display.updateById(id);
                 message.setText("右击记录可以复制到剪切板");
 
             },
+            goDisplayBySelected: function () {
+                if (this.selected >= 0) {
+                    let id = this.result[this.selected].id;
+                    this.goDisplayById(id);
+                }
+            }
+
         }
     });
     search = new Vue({
@@ -277,12 +315,15 @@ $(function () {
         },
         methods: {
             update: function (event) {
-                if (event.keyCode === 13) {
+                if (event.key === 'Enter') {
                     if (select.result.length > 0) {
-                        let id = select.result[0].id;
-                        select.goDisplay(id);
+                        select.goDisplayBySelected();
                     }
 
+                } else if (event.key === 'ArrowDown') {
+                    select.moveBy(1);
+                } else if (event.key === 'ArrowUp') {
+                    select.moveBy(-1);
                 } else {
                     select.show = true;
                     display.show = false;

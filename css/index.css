@@ -167,6 +167,9 @@ div.select > div:hover {
 div.select > div:last-child {
   border-bottom: 1px solid #aaaaaa;
 }
+div.select > div.selected {
+  background-color: #799fff;
+}
 div#message {
   border-top: 1px solid #666;
   position: fixed;

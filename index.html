@@ -30,7 +30,7 @@
 
 </div>
 <div class="select" :style="{display: show? 'block': 'none'}">
-    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index">{{item.id===0?'未找到结果...':'网站：'+item.site}}</div>
+    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index" :class="{'selected':index===selected}">{{item.id===0?'未找到结果...':'网站：'+item.site}}</div>
 
 </div>
 <div class="display clearfix" :style="{display: show?'block':'none'}">

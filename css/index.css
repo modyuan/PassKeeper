@@ -102,14 +102,14 @@ table {
   border-collapse: collapse;
   font-size: 16px;
 }
-table table tr {
+table tr {
   height: 25px;
   vertical-align: center;
 }
-table table tr table td {
+table tr td {
   border: 1px solid #222222;
 }
-table table tr table td input {
+table tr td input {
   overflow: hidden;
   text-overflow: ellipsis;
   outline: none;
@@ -119,11 +119,11 @@ table table tr table td input {
   width: 220px;
   border: none;
 }
-table table tr table td:first-child {
+table tr td:first-child {
   width: 80px;
   padding: 0 10px;
 }
-table table tr table td:last-child {
+table tr td:last-child {
   width: 220px;
 }
 div.display {

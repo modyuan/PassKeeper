@@ -1,0 +1,198 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.clearfix::after {
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+
+body, input, button {
+  font-family: Menlo, "Ubuntu Mono", Consolas, "Courier New", "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+.circle {
+  position: fixed;
+  height: 30px;
+  width: 30px;
+
+  right: 20px;
+  top: 20px;
+
+  border-radius: 15px;
+  line-height: 30px;
+  font-weight: 900;
+  text-align: center;
+  vertical-align: middle;
+  box-shadow: 0.5px 0.5px 5px #aaa;
+  cursor: pointer;
+  user-select: none;
+
+}
+
+div#btn-wrap {
+  font-size: 20px;
+  div#btn-more {
+    z-index: 100;
+    background-color: #ddd;
+    color: white;
+  }
+  div#btn-new {
+    z-index: 30;
+    opacity: 0;
+    background: #67e23b;
+    color: white;
+  }
+
+  div#btn-fix {
+    z-index: 20;
+    opacity: 0;
+    background: #4880e2;
+    color: white;
+    font-size: 20px;
+  }
+
+  div#btn-del {
+    z-index: 10;
+    opacity: 0;
+    background: #e24136;
+    color: white;
+    font-size: 20px;
+  }
+}
+
+div.search-wrap {
+  padding-top: 40px;
+
+  div.search {
+    position: relative;
+    width: 300px;
+    height: 40px;
+    margin: 0 auto;
+    border: 1px solid #aaa;
+    color: #111;
+    border-radius: 5px;
+    padding-left: 8px;
+    box-shadow: 1px 1px 5px #acc5ed;
+    input.search-input {
+      display: block;
+      width: 250px;
+      height: 38px;
+      color: #111;
+      font-size: 25px;
+      line-height: 40px;
+      border: 0 transparent;
+      outline: none;
+    }
+
+    div.btn-search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      right: -1px;
+      top: -1px;
+      border-radius: 0 5px 5px 0;
+      width: 40px;
+      height: 40px;
+      background-color: #799fff;
+      cursor: pointer;
+    }
+  }
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 16px;
+  table tr {
+    height: 25px;
+    vertical-align: center;
+
+    table td {
+      border: 1px solid #222222;
+      input {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        outline: none;
+        padding-left: 5px;
+        font-size: 16px;
+        height: 24.4px;
+        width: 220px;
+        border: none;
+      }
+    }
+    table td:first-child {
+      width: 80px;
+      padding: 0 10px;
+    }
+
+    table td:last-child {
+      width: 220px;
+    }
+  }
+}
+
+div.display {
+  margin: 30px auto 0 auto;
+  width: 300px;
+  font-size: 14px;
+  position: relative;
+  button#submit {
+    float: right;
+    margin-top: 20px;
+    height: 30px;
+    width: 100px;
+  }
+  button#cancel {
+    float: left;
+    margin-top: 20px;
+    height: 30px;
+    width: 100px;
+
+  }
+}
+
+div.select {
+  margin: 40px auto;
+  width: 300px;
+  height: 150px;
+  font-size: 16px;
+  position: relative;
+  overflow: auto;
+  > div {
+    height: 30px;
+    border: 1px solid #aaaaaa;
+    border-bottom: none;
+    font-size: 14px;
+    padding-left: 5px;
+    line-height: 30px;
+    cursor: pointer;
+  }
+  > div:hover {
+    background: #799fff;
+  }
+  > div:last-child {
+    border-bottom: 1px solid #aaaaaa;
+  }
+}
+
+
+div#message {
+  border-top: 1px solid #666;
+  position: fixed;
+  bottom: 0;
+  height: 20px;
+  width: 500px;
+  font-size: 14px;
+  padding-left: 20px;
+  color: #666;
+}

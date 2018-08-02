@@ -1,12 +1,13 @@
 {
   "name": "electron-passkeeper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "yuansu<idgensou@gmail.com>",
   "main": "main.js",
   "dependencies": {},
   "devDependencies": {
     "electron": "^2.0.5",
-    "electron-builder": "^20.26.0"
+    "electron-builder": "^20.26.0",
+    "less": "^3.8.0"
   },
   "scripts": {
     "start": "electron .",

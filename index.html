@@ -9,10 +9,10 @@
 </head>
 <body>
 <div id="btn-wrap">
-    <div id="btn-more" class="circle" @click="trigger">＝</div>
-    <div id="btn-new" class="circle" :style="{animation:animation_add}" @mousemove="keepShow" @click="addItem">＋</div>
-    <div id="btn-fix" class="circle" :style="{animation:animation_fix}" @mousemove="keepShow" @click="fixItem">✏</div>
-    <div id="btn-del" class="circle" :style="{animation:animation_del}" @mousemove="keepShow" @click="delItem">×</div>
+    <div id="btn-more" title="更多操作" class="circle" @click="trigger">＝</div>
+    <div id="btn-new" title="新建记录" class="circle" :style="{animation:animation_add}" @mousemove="keepShow" @click="addItem">＋</div>
+    <div id="btn-fix" title="修改当前记录" class="circle" :style="{animation:animation_fix}" @mousemove="keepShow" @click="fixItem">✏</div>
+    <div id="btn-del" title="删除当前记录" class="circle" :style="{animation:animation_del}" @mousemove="keepShow" @click="delItem">×</div>
 </div>
 
 <div class="search-wrap">
@@ -37,23 +37,23 @@
     <table>
         <tr>
             <td>网站名</td>
-            <td @contextmenu="Rclick('site')" ><input type="text" :style="{color:isReadonly?'#555':'#000'}"  :readonly="isReadonly" placeholder="注册网站名称或域名" v-model="current.site"></td>
+            <td @contextmenu="Rclick('site')" ><input type="text" :title="current.site" :style="{color:isReadonly?'#555':'#000'}"  :readonly="isReadonly" placeholder="注册网站名称或域名" v-model="current.site"></td>
         </tr>
         <tr>
             <td>用户名</td>
-            <td @contextmenu="Rclick('user')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="用户名" v-model="current.user"></td>
+            <td @contextmenu="Rclick('user')"><input type="text" :title="current.user" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="用户名" v-model="current.user"></td>
         </tr>
         <tr>
             <td>密码</td>
-            <td @contextmenu="Rclick('password')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="密码" v-model="current.password"></td>
+            <td @contextmenu="Rclick('password')"><input type="text" :title="current.password" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="密码" v-model="current.password"></td>
         </tr>
         <tr>
             <td>备注</td>
-            <td @contextmenu="Rclick('info')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="备注：例如注册用途等。" v-model="current.info"></td>
+            <td @contextmenu="Rclick('info')"><input type="text" :title="current.info" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="备注：例如注册用途等。" v-model="current.info"></td>
         </tr>
         <tr>
             <td>关键字</td>
-            <td @contextmenu="Rclick('keyword')"><input type="text" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="索引，用逗号分隔开。" v-model="current.keyword"></td>
+            <td @contextmenu="Rclick('keyword')"><input type="text" :title="current.keyword" :style="{color:isReadonly?'#555':'#000'}" :readonly="isReadonly" placeholder="索引，用逗号分隔开。" v-model="current.keyword"></td>
         </tr>
     </table>
     <button id="submit" @click="submit" v-if="!isReadonly">{{newItem?'新增记录':'确认修改'}}</button>

@@ -140,6 +140,11 @@ table td:last-child {
 
 }
 
+table input {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .display {
     margin: 30px auto 0px auto;
     width: 300px;

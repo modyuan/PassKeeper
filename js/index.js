@@ -18,7 +18,7 @@ Array.prototype.removeEmpty = function () {
 };
 
 
-let {remote, ipcRenderer, clipboard} = require('electron');
+let {ipcRenderer, clipboard} = require('electron');
 let counts;
 
 ipcRenderer.on('failToLoad', () => {
@@ -86,10 +86,10 @@ $(function () {
                 display.addItem();
             },
             fixItem: function () {
-                display.setReadonly(false);
+                if(display.show) display.setReadonly(false);
             },
             delItem: function (){
-                display.delItem();
+                if(display.show) display.delItem();
             },
             keepShow: function () {
                 if (this.timer) {

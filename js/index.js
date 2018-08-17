@@ -39,7 +39,7 @@ $(function () {
     ipcRenderer.send("loadFile");
     window.addEventListener('keyup', (e) => {
         if (e.key === 'Escape') {
-            display.cancel();
+            search.clear();
         }
     }, true);
     message = new Vue({
@@ -309,7 +309,7 @@ $(function () {
         }
     });
     search = new Vue({
-        el: ".search-input",
+        el: ".search",
         data: {
             searchWord: ""
         },
@@ -332,6 +332,14 @@ $(function () {
                     });
                 }
             },
+            clear:function(){
+                display.cancel();
+                this.$nextTick(()=>{
+                    this.$refs.input.focus();
+                });
+
+
+            }
         }
     });
 })

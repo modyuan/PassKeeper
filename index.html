@@ -17,7 +17,7 @@
 
 <div class="search-wrap">
     <div class="search">
-        <input type="text" class="search-input" v-model="searchWord" @keyup="update">
+        <input type="text" ref="input" class="search-input" v-model="searchWord" @keyup="update">
         <div class="btn-search">
             <svg viewBox="0 0 16 16" class="icon-search" style="width:24px; width:24px;" aria-hidden="true">
                 <title></title>
@@ -26,11 +26,12 @@
                 </g>
             </svg>
         </div>
+        <div class="search-clear" @click="clear()">×</div>
     </div>
 
 </div>
 <div class="select" :style="{display: show? 'block': 'none'}">
-    <div v-for="(item,index) in result" @click="goDisplay(item.id)" :id="'result-'+index" :class="{'selected':index===selected}">{{item.id===0?'未找到结果...':'网站：'+item.site}}</div>
+    <div v-for="(item,index) in result" @click="goDisplayById(item.id)" :id="'result-'+index" :class="{'selected':index===selected}">{{item.id===0?'未找到结果...':'网站：'+item.site}}</div>
 
 </div>
 <div class="display clearfix" :style="{display: show?'block':'none'}">

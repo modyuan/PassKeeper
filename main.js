@@ -31,7 +31,7 @@ ipcMain.on("saveFile", (event, arg) => {
 app.on('ready', function () {
     window = new BrowserWindow({width: 500, height: 360});
     window.loadURL('file://' + __dirname + '/index.html');
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
     window.setMenu(null);
 });
 

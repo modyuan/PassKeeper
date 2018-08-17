@@ -34,7 +34,7 @@ $(function () {
     ipcRenderer.on('loadFile-reply', (event, arg) => {
         counts = arg;
         message.setText("载入存储文件。");
-        search.$el.focus();
+        search.clear();
     });
     ipcRenderer.send("loadFile");
     window.addEventListener('keyup', (e) => {

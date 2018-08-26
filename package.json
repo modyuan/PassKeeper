@@ -1,6 +1,6 @@
 {
   "name": "electronPasskeeper",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "author": "yuansu<idgensou@gmail.com>",
   "description": "一个用来保管网上各种账户密码的应用",
   "main": "main.js",

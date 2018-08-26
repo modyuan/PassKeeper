@@ -1,6 +1,7 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const path = require('path');
 
 app.commandLine.appendSwitch('remote-debugging-port', '9223');
 
@@ -29,7 +30,7 @@ ipcMain.on("saveFile", (event, arg) => {
 
 
 app.on('ready', function () {
-    window = new BrowserWindow({width: 500, height: 340});
+    window = new BrowserWindow({width: 500, height: 340,icon: path.join(__dirname,"icon_128.png") });
     window.loadURL('file://' + __dirname + '/index.html');
     //window.webContents.openDevTools();
     window.setMenu(null);

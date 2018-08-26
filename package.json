@@ -1,6 +1,6 @@
 {
   "name": "electron-passkeeper",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "yuansu<idgensou@gmail.com>",
   "description": "一个用来保管网上各种账户密码的应用",
   "main": "main.js",
@@ -24,17 +24,13 @@
     "directories": {
       "buildResources": "build"
     },
-    "dmg": {
-      "window": {
-        "x": 200,
-        "y": 200,
-        "width": 500,
-        "height": 360
-      }
-    },
     "win": {
       "icon": "1.png",
       "target": "portable"
+    },
+    "linux": {
+      "icon": "1.png",
+      "target": "AppImage"
     }
   }
 }

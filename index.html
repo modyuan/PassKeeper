@@ -9,24 +9,34 @@
 </head>
 <body>
 <div id="btn-wrap">
-    <div id="btn-more" title="更多操作" class="circle" @click="trigger">＝</div>
-    <div id="btn-new" title="新建记录" class="circle" :style="{animation:animation_add}" @mousemove="keepShow" @click="addItem">＋</div>
-    <div id="btn-fix" title="修改当前记录" class="circle" :style="{animation:animation_fix}" @mousemove="keepShow" @click="fixItem">✏</div>
-    <div id="btn-del" title="删除当前记录" class="circle" :style="{animation:animation_del}" @mousemove="keepShow" @click="delItem">×</div>
+    <div id="btn-more" title="更多操作" class="circle" @click="trigger"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g><path d="M867.5,622.5C799.9,622.5,745,567.6,745,500s54.9-122.5,122.5-122.5S990,432.4,990,500S935.1,622.5,867.5,622.5z M500,622.5c-67.6,0-122.5-54.9-122.5-122.5S432.4,377.5,500,377.5S622.5,432.4,622.5,500S567.6,622.5,500,622.5z M132.5,622.5C64.9,622.5,10,567.6,10,500s54.9-122.5,122.5-122.5S255,432.4,255,500S200.1,622.5,132.5,622.5z"></path></g>
+</svg></div>
+    <div id="btn-new" title="新建记录" class="circle" :style="{animation:animation_add}" @mousemove="keepShow" @click="addItem"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g><polygon points="990,348.6 651.4,348.6 651.4,10 348.6,10 348.6,348.6 10,348.6 10,651.4 348.6,651.4 348.6,990 651.4,990 651.4,651.4 990,651.4 "></polygon></g>
+</svg></div>
+    <div id="btn-fix" title="修改当前记录" class="circle" :style="{animation:animation_fix}" @mousemove="keepShow" @click="fixItem"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g><path d="M266.5,940.4l600.2-603.7L662.8,132.9L62.8,736.6l-17.4,76.5l128.2,143.8L266.5,940.4z"></path><path d="M10,989.7l107.7-21.6l-84.5-94.8L10,989.7z"/><path d="M841.1,26.8c-21.9-21.9-57.4-21.9-79.2,0l-59.2,59.2l211.8,211.8l59.1-59.2c21.9-21.9,21.9-57.4,0-79.3L841.1,26.8z"/></g>
+</svg></div>
+    <div id="btn-del" title="删除当前记录" class="circle" :style="{animation:animation_del}" @mousemove="keepShow" @click="delItem"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g><path d="M670.8,112.1V10h-343v102.1H100.5v98h799v-98H670.8z M137.3,276.8L195.8,990h608.4l58.5-713.2H137.3z M386.3,853.9h-93.9V399.3h93.9V853.9z M545.6,853.9H453V399.3h92.6V853.9z M710.3,853.9h-96.6V399.3h96.6V853.9z"></path></g>
+</svg></div>
 </div>
 
 <div class="search-wrap">
     <div class="search">
         <input type="text" ref="input" class="search-input" v-model="searchWord" @keyup="update">
         <div class="btn-search">
-            <svg viewBox="0 0 16 16" class="icon-search" style="width:24px; width:24px;" aria-hidden="true">
+            <svg viewBox="0 0 16 16" class="icon-search" style="width:24px; height:24px;" aria-hidden="true">
                 <title></title>
                 <g>
                     <path d="M12.054 10.864c.887-1.14 1.42-2.57 1.42-4.127C13.474 3.017 10.457 0 6.737 0S0 3.016 0 6.737c0 3.72 3.016 6.737 6.737 6.737 1.556 0 2.985-.533 4.127-1.42l3.103 3.104c.765.46 1.705-.37 1.19-1.19l-3.103-3.104zm-5.317.925c-2.786 0-5.053-2.267-5.053-5.053S3.95 1.684 6.737 1.684 11.79 3.95 11.79 6.737 9.522 11.79 6.736 11.79z"></path>
                 </g>
             </svg>
         </div>
-        <div class="search-clear" @click="clear()">×</div>
+        <div class="search-clear" @click="clear()"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g><g><path d="M500,10C229.3,10,10,229.4,10,500s219.3,490,490,490s490-219.4,490-490S770.7,10,500,10z M727.1,640.4c23.9,23.9,23.9,62.7,0,86.6C715.1,739,699.4,745,683.8,745c-15.7,0-31.4-6-43.3-17.9L500,586.6L359.6,727.1C347.6,739,331.9,745,316.3,745c-15.7,0-31.4-6-43.3-17.9c-23.9-23.9-23.9-62.7,0-86.6L413.4,500L272.9,359.6c-23.9-23.9-23.9-62.7,0-86.6s62.7-23.9,86.6,0L500,413.4l140.4-140.4c23.9-23.9,62.7-23.9,86.6,0s23.9,62.7,0,86.6L586.6,500L727.1,640.4L727.1,640.4z"/></g></g>
+</svg></div>
     </div>
 
 </div>

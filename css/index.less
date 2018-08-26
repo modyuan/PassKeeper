@@ -13,7 +13,13 @@
 }
 
 body, input, button {
-  font-family: Menlo, "Ubuntu Mono", Consolas, "Courier New", "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+  font-family: Menlo, "Ubuntu Mono", Consolas, "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+}
+
+div#btn-wrap svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
 }
 
 body {
@@ -28,19 +34,22 @@ body {
   right: 20px;
   top: 20px;
 
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+
   border-radius: 15px;
-  line-height: 30px;
-  font-weight: 900;
-  text-align: center;
-  vertical-align: middle;
   box-shadow: 0.5px 0.5px 5px #aaa;
   cursor: pointer;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 
 }
 
 div#btn-wrap {
-  font-size: 20px;
   div#btn-more {
     z-index: 100;
     background-color: #ddd;
@@ -107,17 +116,25 @@ div.search-wrap {
       background-color: #799fff;
       cursor: pointer;
     }
-    div.search-clear{
+    div.search-clear {
       cursor: pointer;
       z-index: 10;
       position: absolute;
-      top: -3px;
-      right: 50px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 26px;
-      color: #aaa;
+      top: 0px;
+      right: 40px;
+
+      height: 39px;
+      width: 39px;
+
       overflow: hidden;
+      display: flex;
+      align-items: center; /* 垂直居中 */
+      justify-content: center; /* 水平居中 */
+      svg {
+        fill: #ccc;
+        height: 20px;
+        width: 20px;
+      }
     }
   }
 }
@@ -196,11 +213,10 @@ div.select {
     border-bottom: 1px solid #aaaaaa;
   }
 
-  > div.selected{
+  > div.selected {
     background-color: #799fff;
   }
 }
-
 
 div#message {
   border-top: 1px solid #666;

@@ -1,12 +1,12 @@
 {
-  "name": "electronPasskeeper",
-  "version": "1.1.0",
+  "name": "Passkeeper",
+  "version": "1.1.1",
   "author": "yuansu<idgensou@gmail.com>",
   "description": "一个用来保管网上各种账户密码的应用",
   "main": "main.js",
   "dependencies": {},
   "devDependencies": {
-    "electron": "^2.0.5",
+    "electron": "^2.0.8",
     "electron-builder": "^20.26.0",
     "less": "^3.8.0"
   },
@@ -25,11 +25,11 @@
       "buildResources": "build"
     },
     "win": {
-      "icon": "1.png",
+      "icon": "icons/512x512.png",
       "target": "portable"
     },
     "linux": {
-      "icon": "1.png",
+      "icon": "icons",
       "target": "AppImage"
     }
   }

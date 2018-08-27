@@ -29,8 +29,10 @@ ipcRenderer.on('failToSave', () => {
     alert("保存文件失败！请检查权限。");
 });
 
+
 let display, select, search, btnWrap, message;
 $(function () {
+
     ipcRenderer.on('loadFile-reply', (event, arg) => {
         counts = arg;
         message.setText("载入存储文件。");
@@ -342,5 +344,6 @@ $(function () {
             }
         }
     });
+    ipcRenderer.send('pageLoaded'); //show window after loaded vue elements
 })
 ;

@@ -29,15 +29,39 @@ ipcMain.on("saveFile", (event, arg) => {
 });
 
 
-app.on('ready', function () {
-    window = new BrowserWindow({width: 500, height: 340,icon: path.join(__dirname,"icon_128.png") });
-    window.loadURL('file://' + __dirname + '/index.html');
-    //window.webContents.openDevTools();
-    window.setMenu(null);
+ipcMain.on("pageLoaded", () => {
+    window.show();
+    console.log("pageLoaded");
 });
 
+let createWindow = function () {
+    window = new BrowserWindow({
+        width: 500,
+        height: 340,
+        maxWidth: 500, minWidth: 500,
+        maxHeight: 340, minHeight: 340,
+        show: false,
+        // icon in linux can not be too large,128x128 is OK. And it will not show in dock while icon is 512x512
+        icon: path.join(__dirname, "128x128.png")
+    });
+    window.setMenu(null);
+    window.loadURL('file://' + __dirname + '/index.html');
+    //window.webContents.openDevTools();
 
-//不加这个的话，打包以后的应用在关闭窗口后会遗留一个进程。
+
+    window.on('closed', () => {
+        window = null;
+    });
+};
+
+app.on('ready', createWindow);
+
+
 app.on('window-all-closed', () => {
-    app.quit()
+    if (process.platform !== 'darwin')
+        app.quit()
+});
+
+app.on('activate', () => {
+    createWindow()
 });

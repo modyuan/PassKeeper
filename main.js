@@ -11,7 +11,7 @@ let window = null;
 let ipcMain = electron.ipcMain;
 
 ipcMain.on("loadFile", function (event, arg) {
-    console.log("event: loadFile.");
+    //console.log("event: loadFile.");
     file.load().then((data) => {
         let countTable = JSON.parse(data);
         event.sender.send("loadFile-reply", countTable);
@@ -22,7 +22,7 @@ ipcMain.on("loadFile", function (event, arg) {
 });
 
 ipcMain.on("saveFile", (event, arg) => {
-    console.log("event: saveFile.");
+    //console.log("event: saveFile.");
     file.save(arg).then().catch(() => {
         event.sender.send("failToSave");
     })
@@ -31,15 +31,19 @@ ipcMain.on("saveFile", (event, arg) => {
 
 ipcMain.on("pageLoaded", () => {
     window.show();
-    console.log("pageLoaded");
 });
 
 let createWindow = function () {
+    let h =340;
+    if (process.platform ==="win32"){
+        // the Height of BrowserWindow include TitleBar!! WTF!!
+        h =360;
+    }
     window = new BrowserWindow({
         width: 500,
-        height: 340,
+        height: h,
         maxWidth: 500, minWidth: 500,
-        maxHeight: 340, minHeight: 340,
+        maxHeight: h, minHeight: h,
         show: false,
         // icon in linux can not be too large,128x128 is OK. And it will not show in dock while icon is 512x512
         icon: path.join(__dirname, "128x128.png")
